@@ -38,7 +38,7 @@ info:
 
     ### Idempotency
 
-    `POST`, `PATCH` and `DELETE` accept an optional `Idempotency-Key` header holding a **UUID v4**. The key is scoped by token + method + path and cached for 48h. Same key + same payload replays the cached response (with `Idempotent-Replay: true` and `Idempotent-Replay-Original-At` headers). Same key + different payload returns `422 idempotency_key_payload_mismatch`. Non-UUID → `400 invalid_idempotency_key`. If the header is omitted, the server generates one server-side, executes the action, and returns it in the `Idempotent-Generated-Key` response header so the client can replay the same operation later by sending it back as `Idempotency-Key`. Generate one UUID per logical operation; reuse it across retries of the *same* operation.
+    `POST`, `PATCH` and `DELETE` accept an optional `Idempotency-Key` header holding a **UUID v4**. The key is scoped by token + method + path and cached for 48h. Same key + same payload replays the cached response (with `Idempotent-Replay: true` and `Idempotent-Replay-Original-At` headers). Same key + different payload returns `422 idempotency_key_payload_mismatch`. Non-UUID → `400 invalid_idempotency_key`. If the header is omitted, the server generates one server-side, executes the action, and returns it in the `Idempotent-Generated-Key` response header so the client can replay the same operation later by sending it back as `Idempotency-Key`. Generate one UUID per logical operation; reuse it across retries of the *same* operation. If Redis becomes unavailable after the action ran, the real response is still returned but may not be cached: until the reservation expires, 60 seconds after the request started, the same key answers `409 idempotency_key_in_progress` (or an error while the outage lasts); after that, a retry with the same key may run the action again.
 
     ### Errors
 
@@ -83,7 +83,7 @@ paths:
                   summary: lists the company document types
                   value:
                     data:
-                    - id: '58'
+                    - id: '10'
                       type: company_document_type
                       attributes:
                         name: Name
@@ -95,10 +95,10 @@ paths:
                       relationships:
                         provider_kind:
                           data:
-                            id: '8'
+                            id: '4'
                             type: provider_kind
                     included:
-                    - id: '8'
+                    - id: '4'
                       type: provider_kind
                       attributes:
                         name: Transporteurs
@@ -127,12 +127,12 @@ paths:
                   summary: tags list
                   value:
                     data:
-                    - id: '110'
+                    - id: '21'
                       type: contact_tag
                       attributes:
                         name: Urgent
                         created_at: '2026-05-20T08:00:00.000000Z'
-                    - id: '109'
+                    - id: '20'
                       type: contact_tag
                       attributes:
                         name: VIP
@@ -177,7 +177,7 @@ paths:
                   summary: tag created
                   value:
                     data:
-                      id: '115'
+                      id: '26'
                       type: contact_tag
                       attributes:
                         name: Prioritaire
@@ -304,7 +304,7 @@ paths:
                   summary: paginated contact workflows
                   value:
                     data:
-                    - id: '100'
+                    - id: '12'
                       type: contact_workflow
                       attributes:
                         name: Onboarding
@@ -312,7 +312,7 @@ paths:
                         created_at: '2026-05-20T08:00:00.000000Z'
                         updated_at: '2026-05-20T08:00:00.000000Z'
                         archived_at:
-                        workflow_id: 115
+                        workflow_id: 14
                         status: complete
                         progress_percentage: 0
                         completed_states_count: 1
@@ -320,26 +320,26 @@ paths:
                         available_actions:
                         - name: create
                           method: POST
-                          href: "/api/v2/contacts/385/workflows"
+                          href: "/api/v2/contacts/34/workflows"
                           required_attributes:
                           - workflow_id
                           optional_attributes:
                           - notify
                         - name: update
                           method: PATCH
-                          href: "/api/v2/contacts/385/workflows/100"
+                          href: "/api/v2/contacts/34/workflows/12"
                           required_attributes: []
                         - name: archive
                           method: POST
-                          href: "/api/v2/contacts/385/workflows/100/archive"
+                          href: "/api/v2/contacts/34/workflows/12/archive"
                           required_attributes: []
                         - name: download
                           method: POST
-                          href: "/api/v2/contacts/385/workflows/100/download"
+                          href: "/api/v2/contacts/34/workflows/12/download"
                           required_attributes: []
                         - name: delete
                           method: DELETE
-                          href: "/api/v2/contacts/385/workflows/100"
+                          href: "/api/v2/contacts/34/workflows/12"
                           required_attributes: []
                         unavailable_actions:
                         - name: unarchive
@@ -347,17 +347,17 @@ paths:
                       relationships:
                         contact:
                           data:
-                            id: '385'
+                            id: '34'
                             type: contact
                         step_requests:
                           data: []
                         contact_workflow_states:
                           data:
-                          - id: '201'
+                          - id: '16'
                             type: contact_workflow_state
                         current_contact_workflow_state:
                           data:
-                            id: '201'
+                            id: '16'
                             type: contact_workflow_state
                     meta:
                       has_more: false
@@ -404,7 +404,7 @@ paths:
                     (v2 default)
                   value:
                     data:
-                      id: '105'
+                      id: '17'
                       type: contact_workflow
                       attributes:
                         name: Onboarding
@@ -412,7 +412,7 @@ paths:
                         created_at: '2026-05-20T08:00:00.000000Z'
                         updated_at: '2026-05-20T08:00:00.000000Z'
                         archived_at:
-                        workflow_id: 124
+                        workflow_id: 23
                         status: complete
                         progress_percentage: 0
                         completed_states_count: 1
@@ -420,26 +420,26 @@ paths:
                         available_actions:
                         - name: create
                           method: POST
-                          href: "/api/v2/contacts/390/workflows"
+                          href: "/api/v2/contacts/39/workflows"
                           required_attributes:
                           - workflow_id
                           optional_attributes:
                           - notify
                         - name: update
                           method: PATCH
-                          href: "/api/v2/contacts/390/workflows/105"
+                          href: "/api/v2/contacts/39/workflows/17"
                           required_attributes: []
                         - name: archive
                           method: POST
-                          href: "/api/v2/contacts/390/workflows/105/archive"
+                          href: "/api/v2/contacts/39/workflows/17/archive"
                           required_attributes: []
                         - name: download
                           method: POST
-                          href: "/api/v2/contacts/390/workflows/105/download"
+                          href: "/api/v2/contacts/39/workflows/17/download"
                           required_attributes: []
                         - name: delete
                           method: DELETE
-                          href: "/api/v2/contacts/390/workflows/105"
+                          href: "/api/v2/contacts/39/workflows/17"
                           required_attributes: []
                         unavailable_actions:
                         - name: unarchive
@@ -447,17 +447,17 @@ paths:
                       relationships:
                         contact:
                           data:
-                            id: '390'
+                            id: '39'
                             type: contact
                         step_requests:
                           data: []
                         contact_workflow_states:
                           data:
-                          - id: '206'
+                          - id: '21'
                             type: contact_workflow_state
                         current_contact_workflow_state:
                           data:
-                            id: '206'
+                            id: '21'
                             type: contact_workflow_state
                     meta:
                       notified: false
@@ -529,7 +529,7 @@ paths:
                   summary: contact workflow with full graph
                   value:
                     data:
-                      id: '115'
+                      id: '30'
                       type: contact_workflow
                       attributes:
                         name: Onboarding
@@ -537,7 +537,7 @@ paths:
                         created_at: '2026-05-20T08:00:00.000000Z'
                         updated_at: '2026-05-20T08:00:00.000000Z'
                         archived_at:
-                        workflow_id: 140
+                        workflow_id: 42
                         status: complete
                         progress_percentage: 0
                         completed_states_count: 1
@@ -545,26 +545,26 @@ paths:
                         available_actions:
                         - name: create
                           method: POST
-                          href: "/api/v2/contacts/396/workflows"
+                          href: "/api/v2/contacts/46/workflows"
                           required_attributes:
                           - workflow_id
                           optional_attributes:
                           - notify
                         - name: update
                           method: PATCH
-                          href: "/api/v2/contacts/396/workflows/115"
+                          href: "/api/v2/contacts/46/workflows/30"
                           required_attributes: []
                         - name: archive
                           method: POST
-                          href: "/api/v2/contacts/396/workflows/115/archive"
+                          href: "/api/v2/contacts/46/workflows/30/archive"
                           required_attributes: []
                         - name: download
                           method: POST
-                          href: "/api/v2/contacts/396/workflows/115/download"
+                          href: "/api/v2/contacts/46/workflows/30/download"
                           required_attributes: []
                         - name: delete
                           method: DELETE
-                          href: "/api/v2/contacts/396/workflows/115"
+                          href: "/api/v2/contacts/46/workflows/30"
                           required_attributes: []
                         unavailable_actions:
                         - name: unarchive
@@ -572,28 +572,28 @@ paths:
                       relationships:
                         contact:
                           data:
-                            id: '396'
+                            id: '46'
                             type: contact
                         step_requests:
                           data: []
                         contact_workflow_states:
                           data:
-                          - id: '217'
+                          - id: '36'
                             type: contact_workflow_state
                         current_contact_workflow_state:
                           data:
-                            id: '217'
+                            id: '36'
                             type: contact_workflow_state
                     meta:
                       api_version: '2.0'
                     included:
-                    - id: '217'
+                    - id: '36'
                       type: contact_workflow_state
                       attributes:
                         name: Step 1
                         inputs:
-                        - id: 318
-                          name: 'Screen #27'
+                        - id: 43
+                          name: 'Screen #33'
                           type: screen
                           position: 1
                           required: false
@@ -637,7 +637,7 @@ paths:
                   summary: contact workflow updated
                   value:
                     data:
-                      id: '124'
+                      id: '40'
                       type: contact_workflow
                       attributes:
                         name: Renamed
@@ -645,7 +645,7 @@ paths:
                         created_at: '2026-05-20T08:00:00.000000Z'
                         updated_at: '2026-05-20T08:00:00.000000Z'
                         archived_at:
-                        workflow_id: 156
+                        workflow_id: 60
                         status: complete
                         progress_percentage: 0
                         completed_states_count: 1
@@ -653,26 +653,26 @@ paths:
                         available_actions:
                         - name: create
                           method: POST
-                          href: "/api/v2/contacts/405/workflows"
+                          href: "/api/v2/contacts/56/workflows"
                           required_attributes:
                           - workflow_id
                           optional_attributes:
                           - notify
                         - name: update
                           method: PATCH
-                          href: "/api/v2/contacts/405/workflows/124"
+                          href: "/api/v2/contacts/56/workflows/40"
                           required_attributes: []
                         - name: archive
                           method: POST
-                          href: "/api/v2/contacts/405/workflows/124/archive"
+                          href: "/api/v2/contacts/56/workflows/40/archive"
                           required_attributes: []
                         - name: download
                           method: POST
-                          href: "/api/v2/contacts/405/workflows/124/download"
+                          href: "/api/v2/contacts/56/workflows/40/download"
                           required_attributes: []
                         - name: delete
                           method: DELETE
-                          href: "/api/v2/contacts/405/workflows/124"
+                          href: "/api/v2/contacts/56/workflows/40"
                           required_attributes: []
                         unavailable_actions:
                         - name: unarchive
@@ -680,17 +680,17 @@ paths:
                       relationships:
                         contact:
                           data:
-                            id: '405'
+                            id: '56'
                             type: contact
                         step_requests:
                           data: []
                         contact_workflow_states:
                           data:
-                          - id: '229'
+                          - id: '49'
                             type: contact_workflow_state
                         current_contact_workflow_state:
                           data:
-                            id: '229'
+                            id: '49'
                             type: contact_workflow_state
                     meta:
                       api_version: '2.0'
@@ -788,7 +788,7 @@ paths:
                   summary: contact workflow archived
                   value:
                     data:
-                      id: '128'
+                      id: '44'
                       type: contact_workflow
                       attributes:
                         name: Onboarding
@@ -796,7 +796,7 @@ paths:
                         created_at: '2026-05-20T08:00:00.000000Z'
                         updated_at: '2026-05-20T08:00:00.000000Z'
                         archived_at: '2026-05-20T08:00:00.000000Z'
-                        workflow_id: 164
+                        workflow_id: 68
                         status: complete
                         progress_percentage: 0
                         completed_states_count: 1
@@ -804,26 +804,26 @@ paths:
                         available_actions:
                         - name: create
                           method: POST
-                          href: "/api/v2/contacts/409/workflows"
+                          href: "/api/v2/contacts/60/workflows"
                           required_attributes:
                           - workflow_id
                           optional_attributes:
                           - notify
                         - name: update
                           method: PATCH
-                          href: "/api/v2/contacts/409/workflows/128"
+                          href: "/api/v2/contacts/60/workflows/44"
                           required_attributes: []
                         - name: unarchive
                           method: POST
-                          href: "/api/v2/contacts/409/workflows/128/unarchive"
+                          href: "/api/v2/contacts/60/workflows/44/unarchive"
                           required_attributes: []
                         - name: download
                           method: POST
-                          href: "/api/v2/contacts/409/workflows/128/download"
+                          href: "/api/v2/contacts/60/workflows/44/download"
                           required_attributes: []
                         - name: delete
                           method: DELETE
-                          href: "/api/v2/contacts/409/workflows/128"
+                          href: "/api/v2/contacts/60/workflows/44"
                           required_attributes: []
                         unavailable_actions:
                         - name: archive
@@ -831,17 +831,17 @@ paths:
                       relationships:
                         contact:
                           data:
-                            id: '409'
+                            id: '60'
                             type: contact
                         step_requests:
                           data: []
                         contact_workflow_states:
                           data:
-                          - id: '233'
+                          - id: '53'
                             type: contact_workflow_state
                         current_contact_workflow_state:
                           data:
-                            id: '233'
+                            id: '53'
                             type: contact_workflow_state
                     meta:
                       api_version: '2.0'
@@ -896,7 +896,7 @@ paths:
                   summary: contact workflow unarchived
                   value:
                     data:
-                      id: '130'
+                      id: '46'
                       type: contact_workflow
                       attributes:
                         name: Onboarding
@@ -904,7 +904,7 @@ paths:
                         created_at: '2026-05-20T08:00:00.000000Z'
                         updated_at: '2026-05-20T08:00:00.000000Z'
                         archived_at:
-                        workflow_id: 168
+                        workflow_id: 72
                         status: complete
                         progress_percentage: 0
                         completed_states_count: 1
@@ -912,26 +912,26 @@ paths:
                         available_actions:
                         - name: create
                           method: POST
-                          href: "/api/v2/contacts/411/workflows"
+                          href: "/api/v2/contacts/62/workflows"
                           required_attributes:
                           - workflow_id
                           optional_attributes:
                           - notify
                         - name: update
                           method: PATCH
-                          href: "/api/v2/contacts/411/workflows/130"
+                          href: "/api/v2/contacts/62/workflows/46"
                           required_attributes: []
                         - name: archive
                           method: POST
-                          href: "/api/v2/contacts/411/workflows/130/archive"
+                          href: "/api/v2/contacts/62/workflows/46/archive"
                           required_attributes: []
                         - name: download
                           method: POST
-                          href: "/api/v2/contacts/411/workflows/130/download"
+                          href: "/api/v2/contacts/62/workflows/46/download"
                           required_attributes: []
                         - name: delete
                           method: DELETE
-                          href: "/api/v2/contacts/411/workflows/130"
+                          href: "/api/v2/contacts/62/workflows/46"
                           required_attributes: []
                         unavailable_actions:
                         - name: unarchive
@@ -939,17 +939,17 @@ paths:
                       relationships:
                         contact:
                           data:
-                            id: '411'
+                            id: '62'
                             type: contact
                         step_requests:
                           data: []
                         contact_workflow_states:
                           data:
-                          - id: '235'
+                          - id: '55'
                             type: contact_workflow_state
                         current_contact_workflow_state:
                           data:
-                            id: '235'
+                            id: '55'
                             type: contact_workflow_state
                     meta:
                       api_version: '2.0'
@@ -1003,14 +1003,14 @@ paths:
                   summary: download scheduled (poll via /downloads/:id)
                   value:
                     data:
-                      id: NCWxXruGfVzHb8Ye_NiVcA
+                      id: u8WWE2qAeEg-yqzt74UjpQ
                       type: download
                       attributes:
                         status: processing
                         url:
                         expires_at:
                         error:
-                        poll_url: https://api.superdocu.local/api/v2/downloads/NCWxXruGfVzHb8Ye_NiVcA
+                        poll_url: https://api.superdocu.local/api/v2/downloads/u8WWE2qAeEg-yqzt74UjpQ
                     meta:
                       api_version: '2.0'
               schema:
@@ -1098,7 +1098,7 @@ paths:
                   summary: paginated contacts
                   value:
                     data:
-                    - id: '415'
+                    - id: '66'
                       type: contact
                       attributes:
                         first_name: Marie
@@ -1107,7 +1107,7 @@ paths:
                         company_name:
                         company_siret:
                         company_siren:
-                        email: user192@umadcorp.com
+                        email: user208@umadcorp.com
                         locale:
                         notes:
                         tracking_params: {}
@@ -1120,15 +1120,15 @@ paths:
                         available_actions:
                         - name: update
                           method: PATCH
-                          href: "/api/v2/contacts/415"
+                          href: "/api/v2/contacts/66"
                           required_attributes: []
                         - name: disable
                           method: POST
-                          href: "/api/v2/contacts/415/disable"
+                          href: "/api/v2/contacts/66/disable"
                           required_attributes: []
                         - name: delete
                           method: DELETE
-                          href: "/api/v2/contacts/415"
+                          href: "/api/v2/contacts/66"
                           required_attributes: []
                         unavailable_actions:
                         - name: invite
@@ -1142,7 +1142,7 @@ paths:
                       relationships:
                         tags:
                           data: []
-                    - id: '414'
+                    - id: '65'
                       type: contact
                       attributes:
                         first_name: Jean
@@ -1151,7 +1151,7 @@ paths:
                         company_name:
                         company_siret:
                         company_siren:
-                        email: user191@umadcorp.com
+                        email: user207@umadcorp.com
                         locale:
                         notes:
                         tracking_params: {}
@@ -1164,15 +1164,15 @@ paths:
                         available_actions:
                         - name: update
                           method: PATCH
-                          href: "/api/v2/contacts/414"
+                          href: "/api/v2/contacts/65"
                           required_attributes: []
                         - name: disable
                           method: POST
-                          href: "/api/v2/contacts/414/disable"
+                          href: "/api/v2/contacts/65/disable"
                           required_attributes: []
                         - name: delete
                           method: DELETE
-                          href: "/api/v2/contacts/414"
+                          href: "/api/v2/contacts/65"
                           required_attributes: []
                         unavailable_actions:
                         - name: invite
@@ -1233,7 +1233,7 @@ paths:
                   summary: contact created
                   value:
                     data:
-                      id: '446'
+                      id: '99'
                       type: contact
                       attributes:
                         first_name: Alice
@@ -1255,15 +1255,15 @@ paths:
                         available_actions:
                         - name: update
                           method: PATCH
-                          href: "/api/v2/contacts/446"
+                          href: "/api/v2/contacts/99"
                           required_attributes: []
                         - name: disable
                           method: POST
-                          href: "/api/v2/contacts/446/disable"
+                          href: "/api/v2/contacts/99/disable"
                           required_attributes: []
                         - name: delete
                           method: DELETE
-                          href: "/api/v2/contacts/446"
+                          href: "/api/v2/contacts/99"
                           required_attributes: []
                         unavailable_actions:
                         - name: invite
@@ -1392,7 +1392,7 @@ paths:
                   summary: contact found
                   value:
                     data:
-                      id: '451'
+                      id: '104'
                       type: contact
                       attributes:
                         first_name: Jean
@@ -1401,7 +1401,7 @@ paths:
                         company_name:
                         company_siret:
                         company_siren:
-                        email: user259@umadcorp.com
+                        email: user279@umadcorp.com
                         locale:
                         notes:
                         tracking_params: {}
@@ -1414,15 +1414,15 @@ paths:
                         available_actions:
                         - name: update
                           method: PATCH
-                          href: "/api/v2/contacts/451"
+                          href: "/api/v2/contacts/104"
                           required_attributes: []
                         - name: disable
                           method: POST
-                          href: "/api/v2/contacts/451/disable"
+                          href: "/api/v2/contacts/104/disable"
                           required_attributes: []
                         - name: delete
                           method: DELETE
-                          href: "/api/v2/contacts/451"
+                          href: "/api/v2/contacts/104"
                           required_attributes: []
                         unavailable_actions:
                         - name: invite
@@ -1477,7 +1477,7 @@ paths:
                   summary: contact updated
                   value:
                     data:
-                      id: '463'
+                      id: '116'
                       type: contact
                       attributes:
                         first_name: Jean-Updated
@@ -1486,7 +1486,7 @@ paths:
                         company_name:
                         company_siret:
                         company_siren:
-                        email: user285@umadcorp.com
+                        email: user305@umadcorp.com
                         locale:
                         notes: VIP
                         tracking_params: {}
@@ -1499,15 +1499,15 @@ paths:
                         available_actions:
                         - name: update
                           method: PATCH
-                          href: "/api/v2/contacts/463"
+                          href: "/api/v2/contacts/116"
                           required_attributes: []
                         - name: disable
                           method: POST
-                          href: "/api/v2/contacts/463/disable"
+                          href: "/api/v2/contacts/116/disable"
                           required_attributes: []
                         - name: delete
                           method: DELETE
-                          href: "/api/v2/contacts/463"
+                          href: "/api/v2/contacts/116"
                           required_attributes: []
                         unavailable_actions:
                         - name: invite
@@ -1660,7 +1660,7 @@ paths:
                   summary: invitation sent
                   value:
                     data:
-                      id: '475'
+                      id: '130'
                       type: contact
                       attributes:
                         first_name: Jean
@@ -1669,7 +1669,7 @@ paths:
                         company_name:
                         company_siret:
                         company_siren:
-                        email: user311@umadcorp.com
+                        email: user335@umadcorp.com
                         locale:
                         notes:
                         tracking_params: {}
@@ -1682,23 +1682,23 @@ paths:
                         available_actions:
                         - name: update
                           method: PATCH
-                          href: "/api/v2/contacts/475"
+                          href: "/api/v2/contacts/130"
                           required_attributes: []
                         - name: invite
                           method: POST
-                          href: "/api/v2/contacts/475/invite"
+                          href: "/api/v2/contacts/130/invite"
                           required_attributes: []
                         - name: disable
                           method: POST
-                          href: "/api/v2/contacts/475/disable"
+                          href: "/api/v2/contacts/130/disable"
                           required_attributes: []
                         - name: delete
                           method: DELETE
-                          href: "/api/v2/contacts/475"
+                          href: "/api/v2/contacts/130"
                           required_attributes: []
                         - name: remind
                           method: POST
-                          href: "/api/v2/contacts/475/reminders"
+                          href: "/api/v2/contacts/130/reminders"
                           required_attributes:
                           - title
                           - body
@@ -1757,7 +1757,7 @@ paths:
                   summary: contact enabled
                   value:
                     data:
-                      id: '483'
+                      id: '138'
                       type: contact
                       attributes:
                         first_name: Jean
@@ -1766,7 +1766,7 @@ paths:
                         company_name:
                         company_siret:
                         company_siren:
-                        email: user327@umadcorp.com
+                        email: user351@umadcorp.com
                         locale:
                         notes:
                         tracking_params: {}
@@ -1779,15 +1779,15 @@ paths:
                         available_actions:
                         - name: update
                           method: PATCH
-                          href: "/api/v2/contacts/483"
+                          href: "/api/v2/contacts/138"
                           required_attributes: []
                         - name: disable
                           method: POST
-                          href: "/api/v2/contacts/483/disable"
+                          href: "/api/v2/contacts/138/disable"
                           required_attributes: []
                         - name: delete
                           method: DELETE
-                          href: "/api/v2/contacts/483"
+                          href: "/api/v2/contacts/138"
                           required_attributes: []
                         unavailable_actions:
                         - name: invite
@@ -1849,7 +1849,7 @@ paths:
                   summary: contact disabled
                   value:
                     data:
-                      id: '489'
+                      id: '146'
                       type: contact
                       attributes:
                         first_name: Jean
@@ -1858,7 +1858,7 @@ paths:
                         company_name:
                         company_siret:
                         company_siren:
-                        email: user339@umadcorp.com
+                        email: user367@umadcorp.com
                         locale:
                         notes:
                         tracking_params: {}
@@ -1871,15 +1871,15 @@ paths:
                         available_actions:
                         - name: update
                           method: PATCH
-                          href: "/api/v2/contacts/489"
+                          href: "/api/v2/contacts/146"
                           required_attributes: []
                         - name: enable
                           method: POST
-                          href: "/api/v2/contacts/489/enable"
+                          href: "/api/v2/contacts/146/enable"
                           required_attributes: []
                         - name: delete
                           method: DELETE
-                          href: "/api/v2/contacts/489"
+                          href: "/api/v2/contacts/146"
                           required_attributes: []
                         unavailable_actions:
                         - name: invite
@@ -1951,7 +1951,7 @@ paths:
                   summary: custom documents_group created
                   value:
                     data:
-                      id: '64'
+                      id: '18'
                       type: documents_group
                       attributes:
                         description: Document optionnel
@@ -1971,12 +1971,12 @@ paths:
                         available_actions:
                         - name: upload
                           method: POST
-                          href: "/api/v2/documents_groups/64/documents"
+                          href: "/api/v2/documents_groups/18/documents"
                           required_attributes:
                           - files[]
                         - name: delete
                           method: DELETE
-                          href: "/api/v2/documents_groups/64"
+                          href: "/api/v2/documents_groups/18"
                           required_attributes: []
                         unavailable_actions:
                         - name: approve
@@ -1996,7 +1996,7 @@ paths:
                           data: []
                         contact:
                           data:
-                            id: '493'
+                            id: '155'
                             type: contact
                         step_request:
                           data:
@@ -2088,20 +2088,20 @@ paths:
                       relationships:
                         pending_actions:
                           data:
-                          - id: step_request:133:validate_form_answer
+                          - id: step_request:24:validate_form_answer
                             type: pending_action
                     included:
-                    - id: step_request:133:validate_form_answer
+                    - id: step_request:24:validate_form_answer
                       type: pending_action
                       attributes:
                         action_type: validate_form_answer
                         resource_type: step_request
-                        resource_id: '133'
-                        contact_id: '495'
+                        resource_id: '24'
+                        contact_id: '159'
                         contact_first_name: John
                         contact_last_name: Doe
-                        workflow_id: '143'
-                        state_id: '256'
+                        workflow_id: '61'
+                        state_id: '78'
                         label: IBAN
                         priority_reason: waiting_for_validation
                         updated_at: '2026-05-20T10:00:00.000000+02:00'
@@ -2146,7 +2146,7 @@ paths:
                   summary: documents_group with documents and checks
                   value:
                     data:
-                      id: '67'
+                      id: '21'
                       type: documents_group
                       attributes:
                         description:
@@ -2166,16 +2166,16 @@ paths:
                         available_actions:
                         - name: approve
                           method: POST
-                          href: "/api/v2/documents_groups/67/approve"
+                          href: "/api/v2/documents_groups/21/approve"
                           required_attributes: []
                         - name: upload
                           method: POST
-                          href: "/api/v2/documents_groups/67/documents"
+                          href: "/api/v2/documents_groups/21/documents"
                           required_attributes:
                           - files[]
                         - name: delete
                           method: DELETE
-                          href: "/api/v2/documents_groups/67"
+                          href: "/api/v2/documents_groups/21"
                           required_attributes: []
                         unavailable_actions:
                         - name: request
@@ -2191,20 +2191,20 @@ paths:
                       relationships:
                         documents:
                           data:
-                          - id: '19'
+                          - id: '6'
                             type: document
                         contact:
                           data:
-                            id: '519'
+                            id: '185'
                             type: contact
                         step_request:
                           data:
-                            id: '147'
+                            id: '39'
                             type: step_request
                     meta:
                       api_version: '2.0'
                     included:
-                    - id: '19'
+                    - id: '6'
                       type: document
                       attributes:
                         original_filename: dummy.png
@@ -2217,28 +2217,28 @@ paths:
                         available_actions:
                         - name: approve
                           method: POST
-                          href: "/api/v2/documents/19/approve"
+                          href: "/api/v2/documents/6/approve"
                           required_attributes: []
                         - name: reject
                           method: POST
-                          href: "/api/v2/documents/19/reject"
+                          href: "/api/v2/documents/6/reject"
                           required_attributes:
                           - rejection_message
                         - name: url
                           method: GET
-                          href: "/api/v2/documents/19/url"
+                          href: "/api/v2/documents/6/url"
                           required_attributes: []
                         - name: delete
                           method: DELETE
-                          href: "/api/v2/documents/19"
+                          href: "/api/v2/documents/6"
                           required_attributes: []
                         unavailable_actions: []
                       relationships:
                         documents_group:
                           data:
-                            id: '67'
+                            id: '21'
                             type: documents_group
-                    - id: '147'
+                    - id: '39'
                       type: step_request
                       attributes:
                         value:
@@ -2246,11 +2246,11 @@ paths:
                         created_at: '2026-05-20T08:00:00.000000Z'
                         updated_at: '2026-05-20T08:00:00.000000Z'
                         status: waiting_for_validation
-                        step_input_id: 416
+                        step_input_id: 149
                         input_type: contact_kind
                         input_name: Name
                         input_kind: simple
-                        documents_group_id: 67
+                        documents_group_id: 21
                         docu_sign_contract_request_id:
                         available_actions: []
                         unavailable_actions:
@@ -2263,10 +2263,16 @@ paths:
                       relationships:
                         documents_group:
                           data:
-                            id: '67'
+                            id: '21'
                             type: documents_group
               schema:
                 "$ref": "#/components/schemas/DocumentsGroup"
+        '403':
+          description: missing both see_all_contacts and validate_documents permissions
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/JsonApiError403"
         '404':
           description: documents_group out of scope
           content:
@@ -2336,7 +2342,7 @@ paths:
                   summary: documents_group approved
                   value:
                     data:
-                      id: '77'
+                      id: '33'
                       type: documents_group
                       attributes:
                         description:
@@ -2356,17 +2362,17 @@ paths:
                         available_actions:
                         - name: request
                           method: POST
-                          href: "/api/v2/documents_groups/77/request"
+                          href: "/api/v2/documents_groups/33/request"
                           required_attributes:
                           - requested_message
                         - name: upload
                           method: POST
-                          href: "/api/v2/documents_groups/77/documents"
+                          href: "/api/v2/documents_groups/33/documents"
                           required_attributes:
                           - files[]
                         - name: delete
                           method: DELETE
-                          href: "/api/v2/documents_groups/77"
+                          href: "/api/v2/documents_groups/33"
                           required_attributes: []
                         unavailable_actions:
                         - name: approve
@@ -2382,20 +2388,26 @@ paths:
                       relationships:
                         documents:
                           data:
-                          - id: '26'
+                          - id: '15'
                             type: document
                         contact:
                           data:
-                            id: '535'
+                            id: '205'
                             type: contact
                         step_request:
                           data:
-                            id: '155'
+                            id: '49'
                             type: step_request
                     meta:
                       api_version: '2.0'
               schema:
                 "$ref": "#/components/schemas/DocumentsGroup"
+        '403':
+          description: see_all_contacts alone cannot approve a documents_group
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/JsonApiError403"
         '422':
           description: 'rejects approve on not_applicable DG (precondition: approveable?)'
           content:
@@ -2439,7 +2451,7 @@ paths:
                   summary: documents_group requested
                   value:
                     data:
-                      id: '79'
+                      id: '36'
                       type: documents_group
                       attributes:
                         description:
@@ -2459,16 +2471,16 @@ paths:
                         available_actions:
                         - name: approve
                           method: POST
-                          href: "/api/v2/documents_groups/79/approve"
+                          href: "/api/v2/documents_groups/36/approve"
                           required_attributes: []
                         - name: upload
                           method: POST
-                          href: "/api/v2/documents_groups/79/documents"
+                          href: "/api/v2/documents_groups/36/documents"
                           required_attributes:
                           - files[]
                         - name: delete
                           method: DELETE
-                          href: "/api/v2/documents_groups/79"
+                          href: "/api/v2/documents_groups/36"
                           required_attributes: []
                         unavailable_actions:
                         - name: request
@@ -2484,15 +2496,15 @@ paths:
                       relationships:
                         documents:
                           data:
-                          - id: '28'
+                          - id: '18'
                             type: document
                         contact:
                           data:
-                            id: '539'
+                            id: '211'
                             type: contact
                         step_request:
                           data:
-                            id: '157'
+                            id: '52'
                             type: step_request
                     meta:
                       api_version: '2.0'
@@ -2612,7 +2624,7 @@ paths:
                   summary: expiration_date updated
                   value:
                     data:
-                      id: '85'
+                      id: '42'
                       type: documents_group
                       attributes:
                         description:
@@ -2632,18 +2644,18 @@ paths:
                         available_actions:
                         - name: upload
                           method: POST
-                          href: "/api/v2/documents_groups/85/documents"
+                          href: "/api/v2/documents_groups/42/documents"
                           required_attributes:
                           - files[]
                         - name: update_expiration
                           method: PATCH
-                          href: "/api/v2/documents_groups/85/expiration_date"
+                          href: "/api/v2/documents_groups/42/expiration_date"
                           required_attributes: []
                           required_any_attributes:
                           - expiration_date
                         - name: delete
                           method: DELETE
-                          href: "/api/v2/documents_groups/85"
+                          href: "/api/v2/documents_groups/42"
                           required_attributes: []
                         unavailable_actions:
                         - name: approve
@@ -2661,11 +2673,11 @@ paths:
                           data: []
                         contact:
                           data:
-                            id: '549'
+                            id: '221'
                             type: contact
                         step_request:
                           data:
-                            id: '163'
+                            id: '58'
                             type: step_request
                     meta:
                       api_version: '2.0'
@@ -2673,7 +2685,7 @@ paths:
                   summary: emission_date updated
                   value:
                     data:
-                      id: '87'
+                      id: '44'
                       type: documents_group
                       attributes:
                         description:
@@ -2693,19 +2705,19 @@ paths:
                         available_actions:
                         - name: upload
                           method: POST
-                          href: "/api/v2/documents_groups/87/documents"
+                          href: "/api/v2/documents_groups/44/documents"
                           required_attributes:
                           - files[]
                         - name: update_expiration
                           method: PATCH
-                          href: "/api/v2/documents_groups/87/expiration_date"
+                          href: "/api/v2/documents_groups/44/expiration_date"
                           required_attributes: []
                           required_any_attributes:
                           - expiration_date
                           - emission_date
                         - name: delete
                           method: DELETE
-                          href: "/api/v2/documents_groups/87"
+                          href: "/api/v2/documents_groups/44"
                           required_attributes: []
                         unavailable_actions:
                         - name: approve
@@ -2723,11 +2735,11 @@ paths:
                           data: []
                         contact:
                           data:
-                            id: '552'
+                            id: '224'
                             type: contact
                         step_request:
                           data:
-                            id: '165'
+                            id: '60'
                             type: step_request
                     meta:
                       api_version: '2.0'
@@ -2814,7 +2826,7 @@ paths:
                   summary: documents_group not_applicable
                   value:
                     data:
-                      id: '91'
+                      id: '48'
                       type: documents_group
                       attributes:
                         description:
@@ -2834,7 +2846,7 @@ paths:
                         available_actions:
                         - name: delete
                           method: DELETE
-                          href: "/api/v2/documents_groups/91"
+                          href: "/api/v2/documents_groups/48"
                           required_attributes: []
                         unavailable_actions:
                         - name: approve
@@ -2856,11 +2868,11 @@ paths:
                           data: []
                         contact:
                           data:
-                            id: '558'
+                            id: '230'
                             type: contact
                         step_request:
                           data:
-                            id: '169'
+                            id: '64'
                             type: step_request
                     meta:
                       api_version: '2.0'
@@ -2937,7 +2949,7 @@ paths:
                   summary: approved when status is not_applicable_pending
                   value:
                     data:
-                      id: '97'
+                      id: '54'
                       type: documents_group
                       attributes:
                         description:
@@ -2957,7 +2969,7 @@ paths:
                         available_actions:
                         - name: delete
                           method: DELETE
-                          href: "/api/v2/documents_groups/97"
+                          href: "/api/v2/documents_groups/54"
                           required_attributes: []
                         unavailable_actions:
                         - name: approve
@@ -2977,15 +2989,15 @@ paths:
                       relationships:
                         documents:
                           data:
-                          - id: '40'
+                          - id: '30'
                             type: document
                         contact:
                           data:
-                            id: '569'
+                            id: '241'
                             type: contact
                         step_request:
                           data:
-                            id: '175'
+                            id: '70'
                             type: step_request
                     meta:
                       api_version: '2.0'
@@ -3034,7 +3046,7 @@ paths:
                   summary: refused when status is not_applicable_pending
                   value:
                     data:
-                      id: '99'
+                      id: '56'
                       type: documents_group
                       attributes:
                         description:
@@ -3054,12 +3066,12 @@ paths:
                         available_actions:
                         - name: upload
                           method: POST
-                          href: "/api/v2/documents_groups/99/documents"
+                          href: "/api/v2/documents_groups/56/documents"
                           required_attributes:
                           - files[]
                         - name: delete
                           method: DELETE
-                          href: "/api/v2/documents_groups/99"
+                          href: "/api/v2/documents_groups/56"
                           required_attributes: []
                         unavailable_actions:
                         - name: approve
@@ -3077,15 +3089,15 @@ paths:
                       relationships:
                         documents:
                           data:
-                          - id: '42'
+                          - id: '32'
                             type: document
                         contact:
                           data:
-                            id: '573'
+                            id: '245'
                             type: contact
                         step_request:
                           data:
-                            id: '177'
+                            id: '72'
                             type: step_request
                     meta:
                       api_version: '2.0'
@@ -3122,20 +3134,26 @@ paths:
                   value:
                     data:
                       type: document
-                      id: '45'
+                      id: '35'
                       attributes:
                         original_filename: doc.pdf
-                        url: https://api.superdocu.local/api/v2/documents/45/file?token=REDACTED
+                        url: https://api.superdocu.local/api/v2/documents/35/file?token=REDACTED
                         expires_at: '2026-05-20T08:05:00.000000Z'
                       relationships:
                         documents_group:
                           data:
-                            id: '102'
+                            id: '59'
                             type: documents_group
                     meta:
                       api_version: '2.0'
               schema:
                 "$ref": "#/components/schemas/Document"
+        '403':
+          description: missing both see_all_contacts and validate_documents permissions
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/JsonApiError403"
         '404':
           description: document out of scope
           content:
@@ -3189,7 +3207,7 @@ paths:
                     as well)
                   value:
                     data:
-                      id: '50'
+                      id: '42'
                       type: document
                       attributes:
                         original_filename: doc.pdf
@@ -3202,16 +3220,16 @@ paths:
                         available_actions:
                         - name: reject
                           method: POST
-                          href: "/api/v2/documents/50/reject"
+                          href: "/api/v2/documents/42/reject"
                           required_attributes:
                           - rejection_message
                         - name: url
                           method: GET
-                          href: "/api/v2/documents/50/url"
+                          href: "/api/v2/documents/42/url"
                           required_attributes: []
                         - name: delete
                           method: DELETE
-                          href: "/api/v2/documents/50"
+                          href: "/api/v2/documents/42"
                           required_attributes: []
                         unavailable_actions:
                         - name: approve
@@ -3219,12 +3237,18 @@ paths:
                       relationships:
                         documents_group:
                           data:
-                            id: '106'
+                            id: '65'
                             type: documents_group
                     meta:
                       api_version: '2.0'
               schema:
                 "$ref": "#/components/schemas/Document"
+        '403':
+          description: see_all_contacts alone cannot approve a document
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/JsonApiError403"
         '422':
           description: 'rejects approve on already-approved document (precondition:
             approveable?)'
@@ -3271,7 +3295,7 @@ paths:
                     rejected as soon as any one document is rejected)
                   value:
                     data:
-                      id: '52'
+                      id: '45'
                       type: document
                       attributes:
                         original_filename: r.pdf
@@ -3284,15 +3308,15 @@ paths:
                         available_actions:
                         - name: approve
                           method: POST
-                          href: "/api/v2/documents/52/approve"
+                          href: "/api/v2/documents/45/approve"
                           required_attributes: []
                         - name: url
                           method: GET
-                          href: "/api/v2/documents/52/url"
+                          href: "/api/v2/documents/45/url"
                           required_attributes: []
                         - name: delete
                           method: DELETE
-                          href: "/api/v2/documents/52"
+                          href: "/api/v2/documents/45"
                           required_attributes: []
                         unavailable_actions:
                         - name: reject
@@ -3300,7 +3324,7 @@ paths:
                       relationships:
                         documents_group:
                           data:
-                            id: '108'
+                            id: '68'
                             type: documents_group
                     meta:
                       api_version: '2.0'
@@ -3400,14 +3424,14 @@ paths:
                     yet)
                   value:
                     data:
-                      id: VZdlCXnr3iSBscgnNpQM0g
+                      id: T-jhms9nZj4Zbh1urOzlKg
                       type: download
                       attributes:
                         status: processing
                         url:
                         expires_at:
                         error:
-                        poll_url: https://api.superdocu.local/api/v2/downloads/VZdlCXnr3iSBscgnNpQM0g
+                        poll_url: https://api.superdocu.local/api/v2/downloads/T-jhms9nZj4Zbh1urOzlKg
                     meta:
                       api_version: '2.0'
               schema:
@@ -3492,14 +3516,14 @@ paths:
                   summary: download scheduled (poll via /downloads/:id)
                   value:
                     data:
-                      id: sG0xWYBWwNH7q8a5Ifwqtg
+                      id: ylVo7KgXVNGMvxr4TYSODQ
                       type: download
                       attributes:
                         status: processing
                         url:
                         expires_at:
                         error:
-                        poll_url: https://api.superdocu.local/api/v2/downloads/sG0xWYBWwNH7q8a5Ifwqtg
+                        poll_url: https://api.superdocu.local/api/v2/downloads/ylVo7KgXVNGMvxr4TYSODQ
                     meta:
                       api_version: '2.0'
               schema:
@@ -3662,8 +3686,8 @@ paths:
                         created: 2
                         errors: 0
                         contact_ids:
-                        - 634
-                        - 635
+                        - 316
+                        - 317
                         error_details: []
                         warning_message:
                     meta:
@@ -3703,24 +3727,25 @@ paths:
                   summary: current consumer info
                   value:
                     data:
-                      id: '829'
+                      id: '468'
                       type: me
                       attributes:
-                        email: user748@umadcorp.com
+                        email: user783@umadcorp.com
                         first_name: John
                         last_name: Doe
                         permissions:
                         - see_all_contacts
                         - manage_contacts
+                        - validate_documents
                         - manage_workflows
                         - manage_portals
                         company:
-                          id: 595
+                          id: 343
                           name: UMad Corp
                           slug: umad-corp
                           default_locale:
                         token:
-                          id: 233
+                          id: 188
                           subject: API
                           expires_at: '2029-05-20T08:00:00.000000Z'
                     meta:
@@ -3785,10 +3810,10 @@ paths:
                       relationships:
                         workflow:
                           data:
-                            id: '379'
+                            id: '315'
                             type: workflow
                     included:
-                    - id: '379'
+                    - id: '315'
                       type: workflow
                       attributes:
                         name: Onboarding
@@ -3804,7 +3829,7 @@ paths:
                       relationships:
                         states:
                           data:
-                          - id: '510'
+                          - id: '356'
                             type: state
                         reminder_template:
                           data:
@@ -3864,12 +3889,12 @@ paths:
                       relationships:
                         workflow:
                           data:
-                            id: '383'
+                            id: '319'
                             type: workflow
                     meta:
                       api_version: '2.0'
                     included:
-                    - id: '383'
+                    - id: '319'
                       type: workflow
                       attributes:
                         name: Onboarding
@@ -3885,7 +3910,7 @@ paths:
                       relationships:
                         states:
                           data:
-                          - id: '514'
+                          - id: '360'
                             type: state
                         reminder_template:
                           data:
@@ -3975,12 +4000,12 @@ paths:
                       relationships:
                         workflow:
                           data:
-                            id: '385'
+                            id: '321'
                             type: workflow
                     meta:
                       api_version: '2.0'
                     included:
-                    - id: '385'
+                    - id: '321'
                       type: workflow
                       attributes:
                         name: Onboarding
@@ -3996,7 +4021,7 @@ paths:
                       relationships:
                         states:
                           data:
-                          - id: '516'
+                          - id: '362'
                             type: state
                         reminder_template:
                           data:
@@ -4106,12 +4131,12 @@ paths:
                       relationships:
                         workflow:
                           data:
-                            id: '389'
+                            id: '325'
                             type: workflow
                     meta:
                       api_version: '2.0'
                     included:
-                    - id: '389'
+                    - id: '325'
                       type: workflow
                       attributes:
                         name: Onboarding
@@ -4127,7 +4152,7 @@ paths:
                       relationships:
                         states:
                           data:
-                          - id: '520'
+                          - id: '366'
                             type: state
                         reminder_template:
                           data:
@@ -4189,12 +4214,12 @@ paths:
                       relationships:
                         workflow:
                           data:
-                            id: '392'
+                            id: '328'
                             type: workflow
                     meta:
                       api_version: '2.0'
                     included:
-                    - id: '392'
+                    - id: '328'
                       type: workflow
                       attributes:
                         name: Onboarding
@@ -4210,7 +4235,7 @@ paths:
                       relationships:
                         states:
                           data:
-                          - id: '523'
+                          - id: '369'
                             type: state
                         reminder_template:
                           data:
@@ -4259,7 +4284,7 @@ paths:
                   summary: paginated reminders
                   value:
                     data:
-                    - id: '31'
+                    - id: '1'
                       type: reminder
                       attributes:
                         title: Rappel
@@ -4269,7 +4294,7 @@ paths:
                       relationships:
                         contact:
                           data:
-                            id: '638'
+                            id: '320'
                             type: contact
                     meta:
                       has_more: false
@@ -4308,7 +4333,7 @@ paths:
                   summary: reminder created
                   value:
                     data:
-                      id: '32'
+                      id: '2'
                       type: reminder
                       attributes:
                         title: Hello
@@ -4318,7 +4343,7 @@ paths:
                       relationships:
                         contact:
                           data:
-                            id: '640'
+                            id: '322'
                             type: contact
                     meta:
                       api_version: '2.0'
@@ -4389,7 +4414,7 @@ paths:
                     items
                   value:
                     data:
-                      id: reminder_options:644
+                      id: reminder_options:327
                       type: reminder_options
                       attributes:
                         reminderable: true
@@ -4441,7 +4466,7 @@ paths:
                   summary: paginated shared_documents
                   value:
                     data:
-                    - id: '5'
+                    - id: '4'
                       type: shared_document
                       attributes:
                         name: Contrat
@@ -4456,28 +4481,28 @@ paths:
                         available_actions:
                         - name: update
                           method: PATCH
-                          href: "/api/v2/shared_documents/5"
+                          href: "/api/v2/shared_documents/4"
                           required_attributes: []
                         - name: update_position
                           method: PATCH
-                          href: "/api/v2/shared_documents/5/position"
+                          href: "/api/v2/shared_documents/4/position"
                           required_attributes:
                           - position
                         - name: url
                           method: GET
-                          href: "/api/v2/shared_documents/5/url"
+                          href: "/api/v2/shared_documents/4/url"
                           required_attributes: []
                         - name: delete
                           method: DELETE
-                          href: "/api/v2/shared_documents/5"
+                          href: "/api/v2/shared_documents/4"
                           required_attributes: []
                         unavailable_actions: []
                       relationships:
                         contact:
                           data:
-                            id: '647'
+                            id: '330'
                             type: contact
-                    - id: '6'
+                    - id: '5'
                       type: shared_document
                       attributes:
                         name: RIB
@@ -4492,12 +4517,12 @@ paths:
                         available_actions:
                         - name: update_position
                           method: PATCH
-                          href: "/api/v2/shared_documents/6/position"
+                          href: "/api/v2/shared_documents/5/position"
                           required_attributes:
                           - position
                         - name: url
                           method: GET
-                          href: "/api/v2/shared_documents/6/url"
+                          href: "/api/v2/shared_documents/5/url"
                           required_attributes: []
                         unavailable_actions:
                         - name: update
@@ -4507,7 +4532,7 @@ paths:
                       relationships:
                         contact:
                           data:
-                            id: '647'
+                            id: '330'
                             type: contact
                     meta:
                       has_more: false
@@ -4546,7 +4571,7 @@ paths:
                   summary: shared_document created
                   value:
                     data:
-                      id: '13'
+                      id: '12'
                       type: shared_document
                       attributes:
                         name: NDA
@@ -4561,26 +4586,26 @@ paths:
                         available_actions:
                         - name: update
                           method: PATCH
-                          href: "/api/v2/shared_documents/13"
+                          href: "/api/v2/shared_documents/12"
                           required_attributes: []
                         - name: update_position
                           method: PATCH
-                          href: "/api/v2/shared_documents/13/position"
+                          href: "/api/v2/shared_documents/12/position"
                           required_attributes:
                           - position
                         - name: url
                           method: GET
-                          href: "/api/v2/shared_documents/13/url"
+                          href: "/api/v2/shared_documents/12/url"
                           required_attributes: []
                         - name: delete
                           method: DELETE
-                          href: "/api/v2/shared_documents/13"
+                          href: "/api/v2/shared_documents/12"
                           required_attributes: []
                         unavailable_actions: []
                       relationships:
                         contact:
                           data:
-                            id: '650'
+                            id: '333'
                             type: contact
                     meta:
                       api_version: '2.0'
@@ -4638,7 +4663,7 @@ paths:
                   summary: updated
                   value:
                     data:
-                      id: '14'
+                      id: '15'
                       type: shared_document
                       attributes:
                         name: Contrat
@@ -4653,26 +4678,26 @@ paths:
                         available_actions:
                         - name: update
                           method: PATCH
-                          href: "/api/v2/shared_documents/14"
+                          href: "/api/v2/shared_documents/15"
                           required_attributes: []
                         - name: update_position
                           method: PATCH
-                          href: "/api/v2/shared_documents/14/position"
+                          href: "/api/v2/shared_documents/15/position"
                           required_attributes:
                           - position
                         - name: url
                           method: GET
-                          href: "/api/v2/shared_documents/14/url"
+                          href: "/api/v2/shared_documents/15/url"
                           required_attributes: []
                         - name: delete
                           method: DELETE
-                          href: "/api/v2/shared_documents/14"
+                          href: "/api/v2/shared_documents/15"
                           required_attributes: []
                         unavailable_actions: []
                       relationships:
                         contact:
                           data:
-                            id: '651'
+                            id: '335'
                             type: contact
                     meta:
                       api_version: '2.0'
@@ -4779,7 +4804,7 @@ paths:
                   summary: shared_document moved to the requested position
                   value:
                     data:
-                      id: '22'
+                      id: '25'
                       type: shared_document
                       attributes:
                         name: Contrat
@@ -4794,26 +4819,26 @@ paths:
                         available_actions:
                         - name: update
                           method: PATCH
-                          href: "/api/v2/shared_documents/22"
+                          href: "/api/v2/shared_documents/25"
                           required_attributes: []
                         - name: update_position
                           method: PATCH
-                          href: "/api/v2/shared_documents/22/position"
+                          href: "/api/v2/shared_documents/25/position"
                           required_attributes:
                           - position
                         - name: url
                           method: GET
-                          href: "/api/v2/shared_documents/22/url"
+                          href: "/api/v2/shared_documents/25/url"
                           required_attributes: []
                         - name: delete
                           method: DELETE
-                          href: "/api/v2/shared_documents/22"
+                          href: "/api/v2/shared_documents/25"
                           required_attributes: []
                         unavailable_actions: []
                       relationships:
                         contact:
                           data:
-                            id: '655'
+                            id: '340'
                             type: contact
                     meta:
                       api_version: '2.0'
@@ -4878,10 +4903,10 @@ paths:
                   value:
                     data:
                       type: shared_document
-                      id: '30'
+                      id: '33'
                       attributes:
                         name: Contrat
-                        url: https://api.superdocu.local/api/v2/shared_documents/30/file?token=REDACTED
+                        url: https://api.superdocu.local/api/v2/shared_documents/33/file?token=REDACTED
                         expires_at: '2026-05-20T08:05:00.000000Z'
                     meta:
                       api_version: '2.0'
@@ -4929,7 +4954,7 @@ paths:
                   summary: appends a module (one or more step inputs) to the step
                   value:
                     data:
-                    - id: '766'
+                    - id: '551'
                       type: step_input
                       attributes:
                         position: 2
@@ -4937,7 +4962,7 @@ paths:
                         display_only: true
                         name: Identité
                         inputable_type: form_input
-                        inputable_id: 64
+                        inputable_id: 21
                         module_type: form
                         inputable:
                           kind: section
@@ -4945,7 +4970,7 @@ paths:
                           title: Identité
                           required: false
                         display_conditions:
-                    - id: '767'
+                    - id: '552'
                       type: step_input
                       attributes:
                         position: 3
@@ -4953,7 +4978,7 @@ paths:
                         display_only: false
                         name: Nom
                         inputable_type: form_input
-                        inputable_id: 65
+                        inputable_id: 22
                         module_type: form
                         inputable:
                           kind: text
@@ -4998,6 +5023,15 @@ paths:
                           type: array
                           items:
                             type: object
+                        conditions:
+                          type: array
+                          items:
+                            type: object
+                          description: 'Optional display conditions of a screen or
+                            docu_sign_contract module: groups (OR) of rules (AND),
+                            each { source, operator, value }, source being the name
+                            of a form field of the workflow. Items of form, checklist
+                            and provider_kind modules carry their own conditions.'
                       required:
                       - kind
   "/api/v2/workflows/{workflow_id}/states/{state_id}/step_inputs/attach":
@@ -5042,7 +5076,7 @@ paths:
                   summary: attaches a catalogue document type
                   value:
                     data:
-                      id: '777'
+                      id: '562'
                       type: step_input
                       attributes:
                         position: 2
@@ -5050,7 +5084,7 @@ paths:
                         display_only: false
                         name: Name
                         inputable_type: company_document_type
-                        inputable_id: 130
+                        inputable_id: 93
                         module_type: provider_kind
                         inputable:
                           kind: document
@@ -5132,7 +5166,7 @@ paths:
                   summary: updates the module flags
                   value:
                     data:
-                      id: '784'
+                      id: '570'
                       type: step_input
                       attributes:
                         position: 2
@@ -5140,7 +5174,7 @@ paths:
                         display_only: false
                         name: Input
                         inputable_type: form_input
-                        inputable_id: 68
+                        inputable_id: 25
                         module_type: form
                         inputable:
                           kind: text
@@ -5177,6 +5211,39 @@ paths:
                           type: boolean
                         display_only:
                           type: boolean
+    delete:
+      summary: Delete a module (soft delete, retain contact data)
+      tags:
+      - "[v2] Step inputs"
+      security:
+      - jwt_bearer_token: []
+      parameters:
+      - name: Idempotency-Key
+        in: header
+        required: false
+        schema:
+          type: string
+          format: uuid
+          example: 550e8400-e29b-41d4-a716-446655440000
+        description: 'Optional UUID v4 for mutating requests. When provided, same
+          key + same payload replays the cached response (within 48h) with `Idempotent-Replay:
+          true` header; same key + different payload returns 422 `idempotency_key_payload_mismatch`.
+          When omitted, the server generates a UUID, executes the action, and exposes
+          the key in the `Idempotent-Generated-Key` response header so the client
+          can replay later by sending it back. Non-UUID → 400 `invalid_idempotency_key`.'
+      - name: policy
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - keep
+        description: 'Only keep is supported: contact data is hidden and retained
+          for restoration. Permanent erasure is unavailable. Preview the impact first
+          with GET /deletion_preview.'
+      responses:
+        '204':
+          description: soft-deletes the module and the matching contacts data
   "/api/v2/step_inputs/{id}/conditions":
     parameters:
     - name: id
@@ -5188,6 +5255,17 @@ paths:
       summary: Replace a module display conditions
       tags:
       - "[v2] Step inputs"
+      description: 'groups is a list of { rules: [{ source_field_key, operator, value
+        }] }: the module shows when one group matches (groups are OR, rules AND).
+        source_field_key is the step_input_<id> of an answerable form field of the
+        same workflow. Operators: equals, not_equals, contains, not_contains, starts_with,
+        ends_with, greater_than, greater_than_or_equal, less_than, less_than_or_equal
+        (numbers and dates), and without value is_empty, is_not_empty, is_checked,
+        is_unchecked. A value compared to a select, radio or multiple choices field
+        must be one of its choices, a value compared to a date field a YYYY-MM-DD
+        date, and a value compared to a number field a number without spaces, a point
+        as decimal separator (4999.99, -12, 1e3), otherwise 422 invalid_conditions.
+        An empty list clears the conditions.'
       security:
       - jwt_bearer_token: []
       parameters:
@@ -5214,7 +5292,7 @@ paths:
                   summary: sets a condition referencing a source field
                   value:
                     data:
-                      id: '790'
+                      id: '576'
                       type: step_input
                       attributes:
                         position: 2
@@ -5222,7 +5300,7 @@ paths:
                         display_only: false
                         name: SIRET
                         inputable_type: form_input
-                        inputable_id: 70
+                        inputable_id: 27
                         module_type: form
                         inputable:
                           kind: text
@@ -5232,7 +5310,7 @@ paths:
                         display_conditions:
                           groups:
                           - rules:
-                            - source_field_key: step_input_791
+                            - source_field_key: step_input_577
                               operator: equals
                               value: pro
                     meta:
@@ -5281,7 +5359,7 @@ paths:
                   summary: moves the module and shifts its siblings
                   value:
                     data:
-                      id: '805'
+                      id: '591'
                       type: step_input
                       attributes:
                         position: 2
@@ -5289,7 +5367,7 @@ paths:
                         display_only: false
                         name: Input
                         inputable_type: form_input
-                        inputable_id: 80
+                        inputable_id: 37
                         module_type: form
                         inputable:
                           kind: text
@@ -5326,6 +5404,39 @@ paths:
                           type: integer
                       required:
                       - position
+  "/api/v2/step_inputs/{id}/deletion_preview":
+    parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      summary: Preview the impact of deleting a module
+      tags:
+      - "[v2] Step inputs"
+      security:
+      - jwt_bearer_token: []
+      responses:
+        '200':
+          description: returns the counters of contacts, answers and documents that
+            a deletion would touch
+          content:
+            application/json:
+              examples:
+                default:
+                  summary: returns the counters of contacts, answers and documents
+                    that a deletion would touch
+                  value:
+                    data:
+                      id: '598'
+                      type: deletion_preview
+                      attributes:
+                        impacted_contacts_count: 0
+                        impacted_requests_count: 0
+                        impacted_documents_count: 0
+                        dependent_modules_count: 0
+                        pending_docusign_envelopes_count: 0
   "/api/v2/step_requests/{id}":
     parameters:
     - name: id
@@ -5341,7 +5452,8 @@ paths:
       - jwt_bearer_token: []
       responses:
         '200':
-          description: step_request payload
+          description: readable with see_all_contacts alone, validation actions unavailable
+            (permission_denied)
           content:
             application/json:
               examples:
@@ -5349,7 +5461,7 @@ paths:
                   summary: step_request payload
                   value:
                     data:
-                      id: '207'
+                      id: '108'
                       type: step_request
                       attributes:
                         value: FR76 1234
@@ -5357,7 +5469,7 @@ paths:
                         created_at: '2026-05-20T08:00:00.000000Z'
                         updated_at: '2026-05-20T08:00:00.000000Z'
                         status: waiting_for_validation
-                        step_input_id: 817
+                        step_input_id: 611
                         input_type: form_input
                         input_name: IBAN
                         input_kind: text
@@ -5366,16 +5478,16 @@ paths:
                         available_actions:
                         - name: approve
                           method: POST
-                          href: "/api/v2/step_requests/207/approve"
+                          href: "/api/v2/step_requests/108/approve"
                           required_attributes: []
                         - name: reject
                           method: POST
-                          href: "/api/v2/step_requests/207/reject"
+                          href: "/api/v2/step_requests/108/reject"
                           required_attributes:
                           - rejection_message
                         - name: update
                           method: PATCH
-                          href: "/api/v2/step_requests/207"
+                          href: "/api/v2/step_requests/108"
                           required_attributes:
                           - value
                         unavailable_actions: []
@@ -5387,7 +5499,7 @@ paths:
               schema:
                 "$ref": "#/components/schemas/StepRequest"
         '403':
-          description: missing validate_documents permission
+          description: missing both see_all_contacts and validate_documents permissions
           content:
             application/json:
               schema:
@@ -5428,7 +5540,7 @@ paths:
                   summary: step_request value corrected and approved
                   value:
                     data:
-                      id: '218'
+                      id: '121'
                       type: step_request
                       attributes:
                         value: FR76 0000 1111 2222
@@ -5436,7 +5548,7 @@ paths:
                         created_at: '2026-05-20T08:00:00.000000Z'
                         updated_at: '2026-05-20T08:00:00.000000Z'
                         status: approved
-                        step_input_id: 844
+                        step_input_id: 644
                         input_type: form_input
                         input_name: IBAN
                         input_kind: text
@@ -5445,12 +5557,12 @@ paths:
                         available_actions:
                         - name: reject
                           method: POST
-                          href: "/api/v2/step_requests/218/reject"
+                          href: "/api/v2/step_requests/121/reject"
                           required_attributes:
                           - rejection_message
                         - name: update
                           method: PATCH
-                          href: "/api/v2/step_requests/218"
+                          href: "/api/v2/step_requests/121"
                           required_attributes:
                           - value
                         unavailable_actions:
@@ -5537,7 +5649,7 @@ paths:
                   summary: step_request approved
                   value:
                     data:
-                      id: '214'
+                      id: '116'
                       type: step_request
                       attributes:
                         value: FR76 1234
@@ -5545,7 +5657,7 @@ paths:
                         created_at: '2026-05-20T08:00:00.000000Z'
                         updated_at: '2026-05-20T08:00:00.000000Z'
                         status: approved
-                        step_input_id: 834
+                        step_input_id: 631
                         input_type: form_input
                         input_name: IBAN
                         input_kind: text
@@ -5554,12 +5666,12 @@ paths:
                         available_actions:
                         - name: reject
                           method: POST
-                          href: "/api/v2/step_requests/214/reject"
+                          href: "/api/v2/step_requests/116/reject"
                           required_attributes:
                           - rejection_message
                         - name: update
                           method: PATCH
-                          href: "/api/v2/step_requests/214"
+                          href: "/api/v2/step_requests/116"
                           required_attributes:
                           - value
                         unavailable_actions:
@@ -5572,6 +5684,12 @@ paths:
                       api_version: '2.0'
               schema:
                 "$ref": "#/components/schemas/StepRequest"
+        '403':
+          description: see_all_contacts alone cannot approve an answer
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/JsonApiError403"
         '422':
           description: 'rejects approve when answer was never submitted (precondition:
             form_input_approveable?)'
@@ -5616,7 +5734,7 @@ paths:
                   summary: step_request rejected
                   value:
                     data:
-                      id: '230'
+                      id: '135'
                       type: step_request
                       attributes:
                         value: FR76 1234
@@ -5624,7 +5742,7 @@ paths:
                         created_at: '2026-05-20T08:00:00.000000Z'
                         updated_at: '2026-05-20T08:00:00.000000Z'
                         status: rejected
-                        step_input_id: 870
+                        step_input_id: 674
                         input_type: form_input
                         input_name: IBAN
                         input_kind: text
@@ -5633,11 +5751,11 @@ paths:
                         available_actions:
                         - name: approve
                           method: POST
-                          href: "/api/v2/step_requests/230/approve"
+                          href: "/api/v2/step_requests/135/approve"
                           required_attributes: []
                         - name: update
                           method: PATCH
-                          href: "/api/v2/step_requests/230"
+                          href: "/api/v2/step_requests/135"
                           required_attributes:
                           - value
                         unavailable_actions:
@@ -5739,24 +5857,24 @@ paths:
                     to the consumer's company)
                   value:
                     data:
-                    - id: provider_activity_30
+                    - id: provider_activity_2
                       type: timeline_event
                       attributes:
                         event_type: document_uploaded
                         created_at: '2026-05-20T09:00:00.000000+02:00'
                         metadata:
-                          contact_id: '681'
+                          contact_id: '369'
                           entity_type: contact
-                          entity_id: '681'
-                    - id: consumer_activity_139
+                          entity_id: '369'
+                    - id: consumer_activity_80
                       type: timeline_event
                       attributes:
                         event_type: document_approved
                         created_at: '2026-05-20T08:00:00.000000+02:00'
                         metadata:
-                          contact_id: '681'
+                          contact_id: '369'
                           entity_type: contact
-                          entity_id: '681'
+                          entity_id: '369'
                     meta:
                       has_more: false
                       next_cursor:
@@ -5820,24 +5938,24 @@ paths:
                   summary: paginated timeline events for the targeted contact
                   value:
                     data:
-                    - id: provider_activity_34
+                    - id: provider_activity_7
                       type: timeline_event
                       attributes:
                         event_type: document_uploaded
                         created_at: '2026-05-20T09:00:00.000000+02:00'
                         metadata:
-                          contact_id: '685'
+                          contact_id: '374'
                           entity_type: contact
-                          entity_id: '685'
-                    - id: consumer_activity_143
+                          entity_id: '374'
+                    - id: consumer_activity_85
                       type: timeline_event
                       attributes:
                         event_type: document_approved
                         created_at: '2026-05-20T08:00:00.000000+02:00'
                         metadata:
-                          contact_id: '685'
+                          contact_id: '374'
                           entity_type: contact
-                          entity_id: '685'
+                          entity_id: '374'
                     meta:
                       has_more: false
                       next_cursor:
@@ -5884,7 +6002,7 @@ paths:
                         limit: 4
                         include_missing_documents_list: false
                         entity_type: Workflow
-                        entity_id: 464
+                        entity_id: 412
                         created_at: '2026-05-20T10:00:00.000+02:00'
                         updated_at: '2026-05-20T10:00:00.000+02:00'
                     meta:
@@ -5932,7 +6050,7 @@ paths:
                         limit: 4
                         include_missing_documents_list: false
                         entity_type: Workflow
-                        entity_id: 471
+                        entity_id: 419
                         created_at: '2026-05-20T10:00:00.000+02:00'
                         updated_at: '2026-05-20T10:00:00.000+02:00'
                     meta:
@@ -6005,7 +6123,7 @@ paths:
                   summary: appends a step
                   value:
                     data:
-                      id: '602'
+                      id: '461'
                       type: state
                       attributes:
                         name: Identité
@@ -6093,7 +6211,7 @@ paths:
                   summary: updates the step
                   value:
                     data:
-                      id: '603'
+                      id: '462'
                       type: state
                       attributes:
                         name: Documents
@@ -6103,24 +6221,24 @@ paths:
                       relationships:
                         step_inputs:
                           data:
-                          - id: '880'
+                          - id: '684'
                             type: step_input
                     meta:
                       api_version: '2.0'
                     included:
-                    - id: '880'
+                    - id: '684'
                       type: step_input
                       attributes:
                         position: 1
                         required: false
                         display_only: true
-                        name: 'Screen #422'
+                        name: 'Screen #482'
                         inputable_type: screen
-                        inputable_id: 592
+                        inputable_id: 483
                         module_type: screen
                         inputable:
                           kind: screen
-                          title: 'Screen #422'
+                          title: 'Screen #482'
                           content: ''
                         display_conditions:
               schema:
@@ -6150,6 +6268,40 @@ paths:
                           type: string
                         condition_on_the_request_to_move_forward:
                           type: string
+    delete:
+      summary: Delete a step (soft delete, retain contact data)
+      tags:
+      - "[v2] Workflow states"
+      security:
+      - jwt_bearer_token: []
+      parameters:
+      - name: Idempotency-Key
+        in: header
+        required: false
+        schema:
+          type: string
+          format: uuid
+          example: 550e8400-e29b-41d4-a716-446655440000
+        description: 'Optional UUID v4 for mutating requests. When provided, same
+          key + same payload replays the cached response (within 48h) with `Idempotent-Replay:
+          true` header; same key + different payload returns 422 `idempotency_key_payload_mismatch`.
+          When omitted, the server generates a UUID, executes the action, and exposes
+          the key in the `Idempotent-Generated-Key` response header so the client
+          can replay later by sending it back. Non-UUID → 400 `invalid_idempotency_key`.'
+      - name: policy
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - keep
+        description: 'Only keep is supported: contact data is hidden and retained
+          for restoration. Permanent erasure is unavailable. Preview the impact first
+          with GET /deletion_preview.'
+      responses:
+        '204':
+          description: soft-deletes the step, its modules and the matching contacts
+            data
   "/api/v2/workflows/{workflow_id}/states/{id}/position":
     parameters:
     - name: workflow_id
@@ -6192,7 +6344,7 @@ paths:
                   summary: moves the step and shifts its siblings
                   value:
                     data:
-                      id: '608'
+                      id: '467'
                       type: state
                       attributes:
                         name: Second
@@ -6202,24 +6354,24 @@ paths:
                       relationships:
                         step_inputs:
                           data:
-                          - id: '885'
+                          - id: '689'
                             type: step_input
                     meta:
                       api_version: '2.0'
                     included:
-                    - id: '885'
+                    - id: '689'
                       type: step_input
                       attributes:
                         position: 1
                         required: false
                         display_only: true
-                        name: 'Screen #427'
+                        name: 'Screen #487'
                         inputable_type: screen
-                        inputable_id: 597
+                        inputable_id: 488
                         module_type: screen
                         inputable:
                           kind: screen
-                          title: 'Screen #427'
+                          title: 'Screen #487'
                           content: ''
                         display_conditions:
               schema:
@@ -6250,6 +6402,44 @@ paths:
                           example: 1
                       required:
                       - position
+  "/api/v2/workflows/{workflow_id}/states/{id}/deletion_preview":
+    parameters:
+    - name: workflow_id
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      summary: Preview the impact of deleting a step
+      tags:
+      - "[v2] Workflow states"
+      security:
+      - jwt_bearer_token: []
+      responses:
+        '200':
+          description: returns the counters of contacts, answers and documents that
+            a deletion would touch
+          content:
+            application/json:
+              examples:
+                default:
+                  summary: returns the counters of contacts, answers and documents
+                    that a deletion would touch
+                  value:
+                    data:
+                      id: '469'
+                      type: deletion_preview
+                      attributes:
+                        impacted_contacts_count: 0
+                        impacted_requests_count: 0
+                        impacted_documents_count: 0
+                        dependent_modules_count: 0
+                        pending_docusign_envelopes_count: 0
   "/api/v2/workflows":
     get:
       summary: List workflow templates with states, step_inputs and properties
@@ -6300,7 +6490,7 @@ paths:
                   summary: paginated workflow templates
                   value:
                     data:
-                    - id: '485'
+                    - id: '439'
                       type: workflow
                       attributes:
                         name: Onboarding
@@ -6368,7 +6558,7 @@ paths:
                   summary: creates an empty sequence with an entry state
                   value:
                     data:
-                      id: '504'
+                      id: '458'
                       type: workflow
                       attributes:
                         name: Onboarding transporteur
@@ -6384,16 +6574,16 @@ paths:
                       relationships:
                         states:
                           data:
-                          - id: '617'
+                          - id: '483'
                             type: state
                         reminder_template:
                           data:
-                            id: '11'
+                            id: '12'
                             type: reminder_template
                     meta:
                       api_version: '2.0'
                     included:
-                    - id: '901'
+                    - id: '712'
                       type: step_input
                       attributes:
                         position: 1
@@ -6401,7 +6591,7 @@ paths:
                         display_only: true
                         name: Welcome
                         inputable_type: screen
-                        inputable_id: 611
+                        inputable_id: 509
                         module_type: screen
                         inputable:
                           kind: screen
@@ -6411,7 +6601,7 @@ paths:
                               Please click on the button below in order to start
                             </div>
                         display_conditions:
-                    - id: '617'
+                    - id: '483'
                       type: state
                       attributes:
                         name: Start screen
@@ -6421,9 +6611,9 @@ paths:
                       relationships:
                         step_inputs:
                           data:
-                          - id: '901'
+                          - id: '712'
                             type: step_input
-                    - id: '11'
+                    - id: '12'
                       type: reminder_template
                       attributes:
                         title: Your file is incomplete
@@ -6435,7 +6625,7 @@ paths:
                         limit: 5
                         include_missing_documents_list: false
                         entity_type: Workflow
-                        entity_id: 504
+                        entity_id: 458
                         created_at: '2026-05-20T10:00:00.000+02:00'
                         updated_at: '2026-05-20T10:00:00.000+02:00'
               schema:
@@ -6488,8 +6678,13 @@ paths:
                           type: array
                           items:
                             type: object
-                          description: Optional blueprint steps. Each step accepts
-                            a name and modules[] DSL entries.
+                          description: 'Optional blueprint steps. Each step accepts
+                            a name and modules[] DSL entries. Every module item (and
+                            screen or docu_sign_contract module) accepts optional
+                            display conditions: [{ rules: [{ source, operator, value
+                            }] }], groups combined with OR and rules with AND, source
+                            being the name of a form field declared anywhere in the
+                            blueprint (same operators as PUT /step_inputs/{id}/conditions).'
                         reminder_template:
                           type: object
                           description: Optional reminder blueprint for the created
@@ -6550,7 +6745,7 @@ paths:
                   summary: default response stays cheap (no completion aggregates)
                   value:
                     data:
-                      id: '519'
+                      id: '473'
                       type: workflow
                       attributes:
                         name: Onboarding
@@ -6566,31 +6761,31 @@ paths:
                       relationships:
                         states:
                           data:
-                          - id: '624'
+                          - id: '490'
                             type: state
-                          - id: '625'
+                          - id: '491'
                             type: state
                         reminder_template:
                           data:
                     meta:
                       api_version: '2.0'
                     included:
-                    - id: '910'
+                    - id: '721'
                       type: step_input
                       attributes:
                         position: 1
                         required: false
                         display_only: true
-                        name: 'Screen #441'
+                        name: 'Screen #508'
                         inputable_type: screen
-                        inputable_id: 617
+                        inputable_id: 515
                         module_type: screen
                         inputable:
                           kind: screen
-                          title: 'Screen #441'
+                          title: 'Screen #508'
                           content: ''
                         display_conditions:
-                    - id: '912'
+                    - id: '723'
                       type: step_input
                       attributes:
                         position: 2
@@ -6598,7 +6793,7 @@ paths:
                         display_only: false
                         name: Input
                         inputable_type: form_input
-                        inputable_id: 117
+                        inputable_id: 82
                         module_type: form
                         inputable:
                           kind: text
@@ -6606,7 +6801,7 @@ paths:
                           label: My field
                           required: false
                         display_conditions:
-                    - id: '624'
+                    - id: '490'
                       type: state
                       attributes:
                         name: Step 1
@@ -6616,26 +6811,26 @@ paths:
                       relationships:
                         step_inputs:
                           data:
-                          - id: '910'
+                          - id: '721'
                             type: step_input
-                          - id: '912'
+                          - id: '723'
                             type: step_input
-                    - id: '911'
+                    - id: '722'
                       type: step_input
                       attributes:
                         position: 1
                         required: false
                         display_only: true
-                        name: 'Screen #443'
+                        name: 'Screen #510'
                         inputable_type: screen
-                        inputable_id: 619
+                        inputable_id: 517
                         module_type: screen
                         inputable:
                           kind: screen
-                          title: 'Screen #443'
+                          title: 'Screen #510'
                           content: ''
                         display_conditions:
-                    - id: '913'
+                    - id: '724'
                       type: step_input
                       attributes:
                         position: 2
@@ -6643,7 +6838,7 @@ paths:
                         display_only: false
                         name: Input
                         inputable_type: form_input
-                        inputable_id: 118
+                        inputable_id: 83
                         module_type: form
                         inputable:
                           kind: text
@@ -6651,7 +6846,7 @@ paths:
                           label: My field
                           required: false
                         display_conditions:
-                    - id: '625'
+                    - id: '491'
                       type: state
                       attributes:
                         name: Step 1
@@ -6661,9 +6856,9 @@ paths:
                       relationships:
                         step_inputs:
                           data:
-                          - id: '911'
+                          - id: '722'
                             type: step_input
-                          - id: '913'
+                          - id: '724'
                             type: step_input
               schema:
                 "$ref": "#/components/schemas/Workflow"
@@ -6703,7 +6898,7 @@ paths:
                   summary: updates only the provided fields
                   value:
                     data:
-                      id: '532'
+                      id: '486'
                       type: workflow
                       attributes:
                         name: Onboarding
@@ -6753,6 +6948,97 @@ paths:
                           type: string
                         start_cta:
                           type: string
+    delete:
+      summary: Delete a workflow (soft delete, retain contact data)
+      tags:
+      - "[v2] Workflows"
+      security:
+      - jwt_bearer_token: []
+      parameters:
+      - name: Idempotency-Key
+        in: header
+        required: false
+        schema:
+          type: string
+          format: uuid
+          example: 550e8400-e29b-41d4-a716-446655440000
+        description: 'Optional UUID v4 for mutating requests. When provided, same
+          key + same payload replays the cached response (within 48h) with `Idempotent-Replay:
+          true` header; same key + different payload returns 422 `idempotency_key_payload_mismatch`.
+          When omitted, the server generates a UUID, executes the action, and exposes
+          the key in the `Idempotent-Generated-Key` response header so the client
+          can replay later by sending it back. Non-UUID → 400 `invalid_idempotency_key`.'
+      - name: policy
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - keep
+        description: 'Only keep is supported: contact data is hidden and retained
+          for restoration. Permanent erasure is unavailable. Preview the impact first
+          with GET /deletion_preview.'
+      responses:
+        '204':
+          description: soft-deletes the workflow, its steps, modules and the contacts
+            data
+  "/api/v2/workflows/{id}/deletion_preview":
+    parameters:
+    - name: id
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      summary: Preview the impact of deleting a workflow
+      tags:
+      - "[v2] Workflows"
+      security:
+      - jwt_bearer_token: []
+      responses:
+        '200':
+          description: returns the counters of contacts, answers and documents that
+            a deletion would touch
+          content:
+            application/json:
+              examples:
+                default:
+                  summary: returns the counters of contacts, answers and documents
+                    that a deletion would touch
+                  value:
+                    data:
+                      id: '493'
+                      type: deletion_preview
+                      attributes:
+                        impacted_contacts_count: 0
+                        impacted_requests_count: 0
+                        impacted_documents_count: 0
+                        dependent_modules_count: 0
+                        pending_docusign_envelopes_count: 0
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      type:
+                        type: string
+                        example: deletion_preview
+                      attributes:
+                        type: object
+                        properties:
+                          impacted_contacts_count:
+                            type: integer
+                          impacted_requests_count:
+                            type: integer
+                          impacted_documents_count:
+                            type: integer
+                          dependent_modules_count:
+                            type: integer
+                          pending_docusign_envelopes_count:
+                            type: integer
   "/api/v2/workflows/{id}/enable":
     parameters:
     - name: id
@@ -6790,7 +7076,7 @@ paths:
                   summary: enables the workflow
                   value:
                     data:
-                      id: '536'
+                      id: '495'
                       type: workflow
                       attributes:
                         name: Onboarding
@@ -6850,7 +7136,7 @@ paths:
                   summary: disables the workflow
                   value:
                     data:
-                      id: '538'
+                      id: '497'
                       type: workflow
                       attributes:
                         name: Onboarding
@@ -6910,7 +7196,7 @@ paths:
                   summary: creates a copy of the sequence
                   value:
                     data:
-                      id: '541'
+                      id: '500'
                       type: workflow
                       attributes:
                         name: Source (copy)
@@ -6926,31 +7212,31 @@ paths:
                       relationships:
                         states:
                           data:
-                          - id: '637'
+                          - id: '503'
                             type: state
                         reminder_template:
                           data:
-                            id: '19'
+                            id: '20'
                             type: reminder_template
                     meta:
                       api_version: '2.0'
                     included:
-                    - id: '935'
+                    - id: '746'
                       type: step_input
                       attributes:
                         position: 1
                         required: false
                         display_only: true
-                        name: 'Screen #467'
+                        name: 'Screen #534'
                         inputable_type: screen
-                        inputable_id: 644
+                        inputable_id: 542
                         module_type: screen
                         inputable:
                           kind: screen
-                          title: 'Screen #467'
+                          title: 'Screen #534'
                           content: "<div class=\"trix-content\">\n  \n</div>\n"
                         display_conditions:
-                    - id: '637'
+                    - id: '503'
                       type: state
                       attributes:
                         name: Step 1
@@ -6960,9 +7246,9 @@ paths:
                       relationships:
                         step_inputs:
                           data:
-                          - id: '935'
+                          - id: '746'
                             type: step_input
-                    - id: '19'
+                    - id: '20'
                       type: reminder_template
                       attributes:
                         title: Your file is incomplete
@@ -6974,7 +7260,7 @@ paths:
                         limit: 5
                         include_missing_documents_list: false
                         entity_type: Workflow
-                        entity_id: 541
+                        entity_id: 500
                         created_at: '2026-05-20T10:00:00.000+02:00'
                         updated_at: '2026-05-20T10:00:00.000+02:00'
               schema:

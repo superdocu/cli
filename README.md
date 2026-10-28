@@ -88,6 +88,15 @@ superdocu contacts export --filter-status active -o contacts.csv
 superdocu dashboard get
 ```
 
+Workflow, step and module deletion retains contact data for restoration from
+the web trash. Preview the impact first; `keep` is the only supported policy.
+Permanent erasure is unavailable.
+
+```sh
+superdocu workflows deletion-preview <id>
+superdocu workflows delete <id> --policy keep
+```
+
 ### Conventions
 
 - **Path parameters** are positional arguments, in path order.
