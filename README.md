@@ -76,6 +76,7 @@ Commands are grouped by resource; run any of them with `--help`:
 superdocu --help
 superdocu contacts --help
 superdocu contacts list --filter-status active --per-page 50
+superdocu contacts list --filter-follow-up-status to_remind
 superdocu contacts get <id>
 superdocu contacts create --first-name Alice --last-name Durand --email alice@example.com
 superdocu contacts invite <id>
@@ -95,6 +96,23 @@ Permanent erasure is unavailable.
 ```sh
 superdocu workflows deletion-preview <id>
 superdocu workflows delete <id> --policy keep
+```
+
+Steps and modules can be duplicated; the copy is inserted right after the
+original.
+
+```sh
+superdocu workflow-states duplicate <workflow-id> <id>
+superdocu step-inputs duplicate <id>
+```
+
+Deleted contacts stay in the trash for 30 days, where they can be restored or
+erased for good.
+
+```sh
+superdocu contacts trash
+superdocu contacts restore <id>
+superdocu contacts purge <id>
 ```
 
 ### Conventions
