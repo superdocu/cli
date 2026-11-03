@@ -258,10 +258,10 @@ func firstTag(op map[string]any) string {
 
 // assignNames derives a stable, collision-free command name for every operation.
 func (s *Spec) assignNames() {
-	collectionGet := map[string]bool{}
+	collectionGet := map[string]string{}
 	for _, o := range s.Operations {
 		if o.Method == "get" && o.IsCollection {
-			collectionGet[o.Path] = true
+			collectionGet[strings.Trim(o.Path, "/")] = o.Group
 		}
 	}
 	byGroup := map[string][]*Operation{}
@@ -275,7 +275,7 @@ func (s *Spec) assignNames() {
 	}
 }
 
-func computeName(o *Operation, collectionGet map[string]bool) string {
+func computeName(o *Operation, collectionGet map[string]string) string {
 	segs := splitPath(o.Path)
 	lastParam := -1
 	for i, sg := range segs {
@@ -311,9 +311,16 @@ func computeName(o *Operation, collectionGet map[string]bool) string {
 		return verb()
 	}
 	if o.Method == "get" && o.IsCollection {
+		fullSegs := strings.Split(strings.Trim(o.Path, "/"), "/")
+		for depth := 1; depth <= len(tail); depth++ {
+			parent := strings.Join(fullSegs[:len(fullSegs)-depth], "/")
+			if group, ok := collectionGet[parent]; ok && group == o.Group {
+				return Kebab(strings.Join(tail[len(tail)-depth:], "-"))
+			}
+		}
 		return "list"
 	}
-	if o.Method == "post" && collectionGet[o.Path] {
+	if _, ok := collectionGet[strings.Trim(o.Path, "/")]; ok && o.Method == "post" {
 		return "create"
 	}
 	name := Kebab(strings.Join(tail, "-"))

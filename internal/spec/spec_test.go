@@ -3,6 +3,8 @@ package spec
 import (
 	"os"
 	"testing"
+
+	"gopkg.in/yaml.v3"
 )
 
 func load(t *testing.T) *Spec {
@@ -68,6 +70,80 @@ func TestCommandNames(t *testing.T) {
 		op := find(t, s, c.method, c.path)
 		if op.Group != c.group || op.Name != c.name {
 			t.Errorf("%s %s => %s/%s, want %s/%s", c.method, c.path, op.Group, op.Name, c.group, c.name)
+		}
+	}
+}
+
+func collectionGet(tag string) map[string]any {
+	return map[string]any{"get": map[string]any{
+		"tags": []any{tag},
+		"responses": map[string]any{"200": map[string]any{"content": map[string]any{
+			"application/json": map[string]any{"schema": map[string]any{"$ref": "#/components/schemas/ItemCollection"}},
+		}}},
+	}}
+}
+
+func loadPaths(t *testing.T, paths map[string]any) *Spec {
+	t.Helper()
+	data, err := yaml.Marshal(map[string]any{"paths": paths})
+	if err != nil {
+		t.Fatal(err)
+	}
+	s, err := Load(data)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return s
+}
+
+func TestFilteredCollectionKeepsTheListName(t *testing.T) {
+	cases := []struct {
+		scenario string
+		paths    map[string]any
+		want     map[string]string
+	}{
+		{
+			"a filtered view of a list is named after its segment",
+			map[string]any{
+				"/api/v2/contacts":       collectionGet("[v2] Contacts"),
+				"/api/v2/contacts/trash": collectionGet("[v2] Contacts"),
+				"/api/v2/contacts/tags":  collectionGet("[v2] Contact tags"),
+			},
+			map[string]string{
+				"/api/v2/contacts":       "contacts list",
+				"/api/v2/contacts/trash": "contacts trash",
+				"/api/v2/contacts/tags":  "contact-tags list",
+			},
+		},
+		{
+			"a filtered view of a nested list keeps the nested list name",
+			map[string]any{
+				"/api/v2/contacts/{id}/workflows":        collectionGet("[v2] Contact workflows"),
+				"/api/v2/contacts/{id}/workflows/active": collectionGet("[v2] Contact workflows"),
+			},
+			map[string]string{
+				"/api/v2/contacts/{id}/workflows":        "contact-workflows list",
+				"/api/v2/contacts/{id}/workflows/active": "contact-workflows active",
+			},
+		},
+		{
+			"a lone list with a trailing slash stays list",
+			map[string]any{"/api/v2/contacts/tags/": collectionGet("[v2] Contacts")},
+			map[string]string{"/api/v2/contacts/tags/": "contacts list"},
+		},
+		{
+			"a lone list whose tag has no name stays list",
+			map[string]any{"/api/v2/contacts/tags": collectionGet("[v2]")},
+			map[string]string{"/api/v2/contacts/tags": " list"},
+		},
+	}
+	for _, c := range cases {
+		s := loadPaths(t, c.paths)
+		for path, want := range c.want {
+			op := find(t, s, "get", path)
+			if got := op.Group + " " + op.Name; got != want {
+				t.Errorf("%s: get %s => %q, want %q", c.scenario, path, got, want)
+			}
 		}
 	}
 }
