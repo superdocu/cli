@@ -55,6 +55,7 @@ func TestCommandNames(t *testing.T) {
 		method, path, group, name string
 	}{
 		{"get", "/api/v2/contacts", "contacts", "list"},
+		{"get", "/api/v2/contacts/trash", "contacts", "trash"},
 		{"post", "/api/v2/contacts", "contacts", "create"},
 		{"get", "/api/v2/contacts/{id}", "contacts", "get"},
 		{"post", "/api/v2/contacts/{id}/invite", "contacts", "invite"},
