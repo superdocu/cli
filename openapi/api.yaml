@@ -187,7 +187,7 @@ paths:
               schema:
                 "$ref": "#/components/schemas/ContactTag"
         '403':
-          description: missing manage_contacts permission
+          description: missing manage_contact_tags permission
           content:
             application/json:
               schema:
@@ -1581,6 +1581,12 @@ paths:
                       api_version: '2.0'
               schema:
                 "$ref": "#/components/schemas/Contact"
+        '422':
+          description: changing tags without manage_contact_tags
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/JsonApiError422"
         '404':
           description: contact out of scope
           content:
@@ -5538,15 +5544,19 @@ paths:
       description: 'groups is a list of { rules: [{ source_field_key, operator, value
         }] }: the module shows when one group matches (groups are OR, rules AND).
         source_field_key is the step_input_<id> of an answerable form field of the
-        same workflow. Operators: equals, not_equals, contains, not_contains, starts_with,
-        ends_with, greater_than, greater_than_or_equal, less_than, less_than_or_equal
+        same workflow. Operators: equals, not_equals, in, not_in, contains, not_contains,
+        starts_with, ends_with, greater_than, greater_than_or_equal, less_than, less_than_or_equal
         (numbers and dates), and without value is_empty, is_not_empty, is_checked,
-        is_unchecked. A value compared to a select, radio or multiple choices field
-        must be one of its choices, a value compared to a date field a YYYY-MM-DD
-        date, and a value compared to a number field a number without spaces, a point
-        as decimal separator (4999.99, -12, 1e3), otherwise 422 invalid_conditions.
-        Text comparisons ignore case and surrounding spaces, not accents; contains
-        and not_contains on a multiple choices field look for a whole checked choice.
+        is_unchecked. in and not_in take a list as value and only apply to select,
+        radio, country and multiple choices fields: in matches when the answer is
+        one of the values (for multiple choices, when at least one is checked), not_in
+        when it is none of them, an empty answer included. A value compared to a select,
+        radio, country or multiple choices field must be one of its choices (ISO alpha-2
+        codes for a country), a value compared to a date field a YYYY-MM-DD date,
+        and a value compared to a number field a number without spaces, a point as
+        decimal separator (4999.99, -12, 1e3), otherwise 422 invalid_conditions. Text
+        comparisons ignore case and surrounding spaces, not accents; contains and
+        not_contains on a multiple choices field look for a whole checked choice.
         An empty list clears the conditions.'
       security:
       - jwt_bearer_token: []
