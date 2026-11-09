@@ -77,6 +77,7 @@ superdocu --help
 superdocu contacts --help
 superdocu contacts list --filter-status active --per-page 50
 superdocu contacts list --filter-follow-up-status to_remind
+superdocu contacts list --filter-tag-groups '1,2;3' --filter-exclude-tag-id 4,5
 superdocu contacts get <id>
 superdocu contacts create --first-name Alice --last-name Durand --email alice@example.com
 superdocu contacts invite <id>
@@ -87,6 +88,7 @@ superdocu imports import --file contacts.csv
 superdocu shared-documents create <id> --name "Contrat" --file contrat.pdf
 superdocu contacts export --filter-status active -o contacts.csv
 superdocu dashboard get
+superdocu step-inputs conditions <id> --data-json '{"data":{"type":"step_input","attributes":{"groups":[{"rules":[{"source_field_key":"step_input_12","operator":"in","value":["Licence 3","Licence 4"]}]}]}}}'
 ```
 
 Workflow, step and module deletion retains contact data for restoration from

@@ -1088,6 +1088,36 @@ paths:
         schema:
           type: string
           example: '1,2'
+          description: Comma-separated tag ids, all required (AND). Same as one filter[tag_groups]
+            group per id.
+      - name: filter[tag_groups]
+        in: query
+        required: false
+        schema:
+          type: string
+          example: 1,2;3
+          description: 'Tag groups separated by ";": a contact must match every group
+            (AND) and, within a group, carry at least one of its comma-separated tag
+            ids (OR). "1,2;3" lists contacts tagged (1 or 2) and 3. Combines with
+            filter[tag_id].'
+      - name: filter[exclude_tag_id]
+        in: query
+        required: false
+        schema:
+          type: string
+          example: '4,5'
+          description: 'Comma-separated tag ids: contacts carrying at least one of
+            them are left out.'
+      - name: filter[tagged]
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - 'true'
+          - 'false'
+          description: true keeps contacts carrying at least one tag, false contacts
+            without any tag. Any other value is rejected with invalid_filter.
       - name: filter[q]
         in: query
         required: false
@@ -5515,6 +5545,8 @@ paths:
         must be one of its choices, a value compared to a date field a YYYY-MM-DD
         date, and a value compared to a number field a number without spaces, a point
         as decimal separator (4999.99, -12, 1e3), otherwise 422 invalid_conditions.
+        Text comparisons ignore case and surrounding spaces, not accents; contains
+        and not_contains on a multiple choices field look for a whole checked choice.
         An empty list clears the conditions.'
       security:
       - jwt_bearer_token: []
