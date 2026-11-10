@@ -255,6 +255,12 @@ paths:
       responses:
         '204':
           description: tag destroyed
+        '422':
+          description: tag used in a role assignment perimeter
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/JsonApiError422"
         '404':
           description: tag out of scope
           content:
@@ -5320,101 +5326,6 @@ paths:
                             and provider_kind modules carry their own conditions.'
                       required:
                       - kind
-  "/api/v2/workflows/{workflow_id}/states/{state_id}/step_inputs/attach":
-    parameters:
-    - name: workflow_id
-      in: path
-      required: true
-      schema:
-        type: string
-    - name: state_id
-      in: path
-      required: true
-      schema:
-        type: string
-    post:
-      summary: Attach an existing reusable module to a step
-      tags:
-      - "[v2] Step inputs"
-      security:
-      - jwt_bearer_token: []
-      parameters:
-      - name: Idempotency-Key
-        in: header
-        required: false
-        schema:
-          type: string
-          format: uuid
-          example: 550e8400-e29b-41d4-a716-446655440000
-        description: 'Optional UUID v4 for mutating requests. When provided, same
-          key + same payload replays the cached response (within 48h) with `Idempotent-Replay:
-          true` header; same key + different payload returns 422 `idempotency_key_payload_mismatch`.
-          When omitted, the server generates a UUID, executes the action, and exposes
-          the key in the `Idempotent-Generated-Key` response header so the client
-          can replay later by sending it back. Non-UUID → 400 `invalid_idempotency_key`.'
-      responses:
-        '201':
-          description: attaches a catalogue document type
-          content:
-            application/json:
-              examples:
-                default:
-                  summary: attaches a catalogue document type
-                  value:
-                    data:
-                      id: '2250'
-                      type: step_input
-                      attributes:
-                        position: 2
-                        required: true
-                        display_only: false
-                        name: Name
-                        inputable_type: company_document_type
-                        inputable_id: 465
-                        module_type: provider_kind
-                        inputable:
-                          kind: document
-                          name: Name
-                          required: true
-                          expirable: false
-                        display_conditions:
-                    meta:
-                      api_version: '2.0'
-              schema:
-                "$ref": "#/components/schemas/StepInput"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-              - data
-              properties:
-                data:
-                  type: object
-                  required:
-                  - type
-                  - attributes
-                  properties:
-                    type:
-                      type: string
-                      enum:
-                      - step_input
-                    attributes:
-                      type: object
-                      properties:
-                        inputable_type:
-                          type: string
-                          enum:
-                          - CompanyDocumentType
-                          - Screen
-                        inputable_id:
-                          type: integer
-                        required:
-                          type: boolean
-                      required:
-                      - inputable_type
-                      - inputable_id
   "/api/v2/step_inputs/{id}":
     parameters:
     - name: id
