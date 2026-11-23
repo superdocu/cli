@@ -172,8 +172,12 @@ func TestJSONBody(t *testing.T) {
 func TestMultipartBodies(t *testing.T) {
 	s := load(t)
 
-	if mp := find(t, s, "post", "/api/v2/contacts/import").Multipart; mp == nil || !mp.BareBinary {
-		t.Errorf("import should be bare-binary multipart: %+v", mp)
+	imp := find(t, s, "post", "/api/v2/contacts/import").Multipart
+	if imp == nil || len(imp.Files) != 1 || imp.Files[0].Name != "file" {
+		t.Errorf("import should expose a 'file' field: %+v", imp)
+	}
+	if !hasAttr(imp.TextFields, "column_mapping") {
+		t.Errorf("import should expose a 'column_mapping' text field: %+v", imp.TextFields)
 	}
 	if mp := find(t, s, "post", "/api/v2/documents_groups/{id}/documents").Multipart; mp == nil || !mp.ArrayBinary {
 		t.Errorf("documents upload should be array-binary multipart: %+v", mp)

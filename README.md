@@ -85,6 +85,7 @@ superdocu documents-groups approve <id>
 superdocu documents-groups request <id> --requested-message "Merci d'ajouter le recto"
 superdocu step-requests reject <id> --rejection-message "Document illisible"
 superdocu imports import --file contacts.csv
+superdocu imports import --file contacts.csv --column-mapping '{"Mail pro":"email","Prénom":"first_name","Nom":"last_name","Note":"ignore"}'
 superdocu shared-documents create <id> --name "Contrat" --file contrat.pdf
 superdocu contacts export --filter-status active -o contacts.csv
 superdocu dashboard get
